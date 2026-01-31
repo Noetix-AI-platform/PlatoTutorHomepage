@@ -287,66 +287,207 @@ position: relative;
 height: 84vh;
 min-height: 640px;
 }
+.knowledge-tree {
+position: absolute;
+inset: 0;
+width: 100%;
+height: 100%;
+filter: drop-shadow(0 18px 60px rgba(0,0,0,0.6));
+}
+.knowledge-tree .trunk,
+.knowledge-tree .twig,
+.knowledge-tree .branch1,
+.knowledge-tree .branch2,
+.knowledge-tree .branch3 {
+pointer-events: none;
+}
+.knowledge-tree .trunk {
+stroke: rgba(255, 255, 255, 0.12);
+stroke-width: calc(3.2px + var(--g0, 0) * 1.6px);
+stroke-linecap: round;
+stroke-linejoin: round;
+fill: none;
+}
+.knowledge-tree .twig {
+stroke: rgba(255, 255, 255, 0.08);
+stroke-width: calc(2.2px + var(--g0, 0) * 1.2px);
+stroke-linecap: round;
+stroke-linejoin: round;
+fill: none;
+}
+.knowledge-tree .trunk,
+.knowledge-tree .twig {
+opacity: calc(0.55 + var(--g0, 0) * 0.45);
+}
+.knowledge-tree .branch1 {
+stroke: rgba(160, 220, 230, 0.55);
+stroke-width: 4.2;
+stroke-linecap: round;
+stroke-linejoin: round;
+fill: none;
+opacity: calc(0.18 + var(--g1, 0) * 0.92);
+filter: drop-shadow(0 0 18px rgba(160, 220, 230, calc(0.10 + var(--g1, 0) * 0.22)));
+}
+.knowledge-tree .branch2 {
+stroke: rgba(195, 170, 235, 0.52);
+stroke-width: 4.2;
+stroke-linecap: round;
+stroke-linejoin: round;
+fill: none;
+opacity: calc(0.18 + var(--g2, 0) * 0.92);
+filter: drop-shadow(0 0 18px rgba(195, 170, 235, calc(0.10 + var(--g2, 0) * 0.22)));
+}
+.knowledge-tree .branch3 {
+stroke: rgba(212, 175, 55, 0.58);
+stroke-width: 4.2;
+stroke-linecap: round;
+stroke-linejoin: round;
+fill: none;
+opacity: calc(0.18 + var(--g3, 0) * 0.92);
+filter: drop-shadow(0 0 18px rgba(212, 175, 55, calc(0.08 + var(--g3, 0) * 0.22)));
+}
+.knowledge-tree .bud {
+fill: rgba(255,255,255,0.08);
+opacity: 0.65;
+}
+.knowledge-tree .tree-hit {
+fill: none;
+stroke: rgba(255,255,255,0);
+stroke-width: 26;
+stroke-linecap: round;
+stroke-linejoin: round;
+pointer-events: stroke;
+}
+.knowledge-tree .tree-hit--neutral {
+stroke-width: 22;
+}
+.knowledge-tree .flow {
+fill: none;
+stroke-linecap: round;
+stroke-linejoin: round;
+stroke-dasharray: 10 260;
+animation: tree-flow 2.6s linear infinite;
+}
+.knowledge-tree .flow-neutral {
+stroke: rgba(255,255,255,0.0);
+stroke-width: 3.0;
+opacity: calc(0.10 + var(--g0, 0) * 0.60);
+filter: drop-shadow(0 0 10px rgba(255,255,255,calc(0.08 + var(--g0,0) * 0.18)));
+}
+.knowledge-tree .flow-b1 {
+stroke: rgba(160, 220, 230, 0.0);
+stroke-width: 4.0;
+opacity: calc(0.10 + var(--g1, 0) * 0.70);
+filter: drop-shadow(0 0 12px rgba(160, 220, 230, calc(0.08 + var(--g1,0) * 0.20)));
+}
+.knowledge-tree .flow-b2 {
+stroke: rgba(195, 170, 235, 0.0);
+stroke-width: 4.4;
+opacity: calc(0.14 + var(--g2, 0) * 0.78);
+filter: drop-shadow(0 0 14px rgba(195, 170, 235, calc(0.10 + var(--g2,0) * 0.26)));
+}
+.knowledge-tree .flow-b3 {
+stroke: rgba(212, 175, 55, 0.0);
+stroke-width: 4.0;
+opacity: calc(0.08 + var(--g3, 0) * 0.70);
+filter: drop-shadow(0 0 12px rgba(212, 175, 55, calc(0.06 + var(--g3,0) * 0.20)));
+}
+@keyframes tree-flow {
+0% { stroke-dashoffset: 280; }
+100% { stroke-dashoffset: 0; }
+}
+.prism-pillar {
+pointer-events: none;
+opacity: 0;
+background: transparent !important;
+}
+.prism-pillar.prism-pillar--ghost {
+position: absolute;
+width: 0;
+height: 0;
+left: 0;
+bottom: 0;
+}
 .prism-pillar {
 --accent: rgba(170, 220, 230, 0.55);
 --accent2: rgba(170, 220, 230, 0.22);
 --glow: 0;
 position: absolute;
 bottom: 42px;
-border-radius: 18px;
+border-radius: 10px;
 pointer-events: none;
 opacity: 0.92;
 transform-origin: 50% 85%;
+clip-path: polygon(16% 0%, 84% 0%, 100% 14%, 82% 100%, 18% 100%, 0% 14%);
 }
 .prism-pillar::before {
 content: '';
 position: absolute;
 inset: 0;
-border-radius: 18px;
+border-radius: 10px;
 background:
-linear-gradient(110deg,
-rgba(255,255,255,0.11) 0%,
-rgba(255,255,255,0.02) 24%,
-rgba(255,255,255,0.02) 56%,
-rgba(255,255,255,0.08) 100%),
-repeating-linear-gradient(100deg,
-rgba(255,255,255,0.025) 0px,
-rgba(255,255,255,0.025) 1px,
-rgba(255,255,255,0) 10px,
-rgba(255,255,255,0) 18px);
+linear-gradient(90deg,
+rgba(255,255,255,0.06) 0%,
+rgba(255,255,255,0.02) 18%,
+rgba(0,0,0,0.00) 30%,
+rgba(0,0,0,0.12) 46%,
+rgba(255,255,255,0.03) 62%,
+rgba(0,0,0,0.26) 78%,
+rgba(255,255,255,0.05) 100%),
+linear-gradient(180deg,
+rgba(255,255,255,0.08) 0%,
+rgba(0,0,0,0.00) 26%,
+rgba(0,0,0,0.42) 100%);
 box-shadow:
-0 0 0 1px rgba(255,255,255,0.08) inset,
+0 0 0 1px rgba(255,255,255,0.06) inset,
 0 18px 80px rgba(0,0,0,0.55);
+clip-path: inherit;
 }
 .prism-pillar::after {
 content: '';
 position: absolute;
 inset: 0;
-border-radius: 18px;
+border-radius: 10px;
 background:
-linear-gradient(to right,
-rgba(255,255,255,0.12) 0%,
-rgba(255,255,255,0.02) 18%,
-rgba(255,255,255,0.0) 50%,
-rgba(255,255,255,0.03) 82%,
-rgba(255,255,255,0.16) 100%);
-opacity: 0.7;
+linear-gradient(90deg,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) 14%,
+rgba(255,255,255,0.10) 16%,
+rgba(255,255,255,0.00) 24%,
+rgba(0,0,0,0.00) 48%,
+rgba(255,255,255,0.12) 50%,
+rgba(255,255,255,0.00) 58%,
+rgba(0,0,0,0.00) 82%,
+rgba(255,255,255,0.10) 84%,
+rgba(0,0,0,0.00) 100%);
+opacity: 0.9;
 mix-blend-mode: screen;
+clip-path: inherit;
 }
 .prism-edge {
 position: absolute;
-inset: -2px;
-border-radius: 20px;
+inset: -3px;
+border-radius: 12px;
 pointer-events: none;
 opacity: calc(var(--glow) * 0.95);
 background:
-linear-gradient(92deg,
+linear-gradient(90deg,
 rgba(255,255,255,0) 0%,
-var(--accent) 28%,
-rgba(255,255,255,0) 52%,
-var(--accent2) 78%,
-rgba(255,255,255,0) 100%);
-filter: blur(0.35px);
+rgba(255,255,255,0) 14%,
+var(--accent) 16%,
+rgba(255,255,255,0) 22%,
+rgba(255,255,255,0) 48%,
+var(--accent2) 50%,
+rgba(255,255,255,0) 56%,
+rgba(255,255,255,0) 82%,
+var(--accent) 84%,
+rgba(255,255,255,0) 100%),
+linear-gradient(180deg,
+rgba(255,255,255,0.18) 0%,
+rgba(255,255,255,0.00) 26%,
+rgba(0,0,0,0.00) 100%);
+filter: blur(0px);
+clip-path: polygon(16% 0%, 84% 0%, 100% 14%, 82% 100%, 18% 100%, 0% 14%);
 }
 .prism-dispersion {
 position: absolute;
@@ -842,24 +983,119 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
                             </div>
                         </div>
                         <p class="font-sans text-xs text-white/35 leading-loose mt-6 tracking-wider">
-                            Move the torch across the prisms to refract the keywords.
+                            Move the torch across the branches to refract the keywords.
                         </p>
                     </div>
                 </div>
 
                 <div class="prism-pillar-area" id="prism-area">
-                    <div class="prism-pillar" id="p1" style="left: 14%; width: 90px; height: 72vh; transform: rotate(-7deg); --accent: rgba(160, 220, 230, 0.55); --accent2: rgba(160, 220, 230, 0.18);">
-                        <div class="prism-edge"></div>
-                        <div class="prism-dispersion"><span class="c1"></span><span class="c2"></span><span class="c3"></span></div>
-                    </div>
-                    <div class="prism-pillar" id="p2" style="left: 44%; width: 74px; height: 64vh; bottom: 30px; transform: rotate(5deg); --accent: rgba(195, 170, 235, 0.48); --accent2: rgba(195, 170, 235, 0.18);">
-                        <div class="prism-edge"></div>
-                        <div class="prism-dispersion"><span class="c1"></span><span class="c2"></span><span class="c3"></span></div>
-                    </div>
-                    <div class="prism-pillar" id="p3" style="left: 66%; width: 82px; height: 78vh; bottom: 54px; transform: rotate(-3deg); --accent: rgba(212, 175, 55, 0.42); --accent2: rgba(212, 175, 55, 0.16);">
-                        <div class="prism-edge"></div>
-                        <div class="prism-dispersion"><span class="c1"></span><span class="c2"></span><span class="c3"></span></div>
-                    </div>
+                    <svg class="knowledge-tree" viewBox="0 0 600 900" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="flowNeutral" x1="0" y1="900" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="rgba(255,255,255,0)" />
+                                <stop offset="35%" stop-color="rgba(255,255,255,0.0)" />
+                                <stop offset="52%" stop-color="rgba(255,255,255,0.65)" />
+                                <stop offset="64%" stop-color="rgba(255,255,255,0.0)" />
+                                <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+                            </linearGradient>
+                            <linearGradient id="flowCyan" x1="0" y1="900" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="rgba(160,220,230,0)" />
+                                <stop offset="45%" stop-color="rgba(160,220,230,0.0)" />
+                                <stop offset="58%" stop-color="rgba(160,220,230,0.80)" />
+                                <stop offset="70%" stop-color="rgba(160,220,230,0.0)" />
+                                <stop offset="100%" stop-color="rgba(160,220,230,0)" />
+                            </linearGradient>
+                            <linearGradient id="flowViolet" x1="0" y1="900" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="rgba(195,170,235,0)" />
+                                <stop offset="45%" stop-color="rgba(195,170,235,0.0)" />
+                                <stop offset="58%" stop-color="rgba(195,170,235,0.92)" />
+                                <stop offset="70%" stop-color="rgba(195,170,235,0.0)" />
+                                <stop offset="100%" stop-color="rgba(195,170,235,0)" />
+                            </linearGradient>
+                            <linearGradient id="flowGold" x1="0" y1="900" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="rgba(212,175,55,0)" />
+                                <stop offset="45%" stop-color="rgba(212,175,55,0.0)" />
+                                <stop offset="58%" stop-color="rgba(212,175,55,0.80)" />
+                                <stop offset="70%" stop-color="rgba(212,175,55,0.0)" />
+                                <stop offset="100%" stop-color="rgba(212,175,55,0)" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Trunk (asymmetric, elegant) -->
+                        <path class="trunk" d="M305 860 C295 785 286 730 290 665 C294 604 312 548 320 486 C332 395 320 330 305 270" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M305 860 C295 785 286 730 290 665 C294 604 312 548 320 486 C332 395 320 330 305 270" />
+
+                        <!-- Secondary twigs -->
+                        <path class="twig" d="M318 486 C360 450 405 420 468 398" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M318 486 C360 450 405 420 468 398" />
+                        <path class="twig" d="M305 350 C274 312 236 276 206 236" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M305 350 C274 312 236 276 206 236" />
+                        <path class="twig" d="M332 410 C358 386 392 360 430 344" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M332 410 C358 386 392 360 430 344" />
+
+                        <!-- First split into three primary branches (near the root) -->
+                        <path class="branch1" d="M300 720 C246 690 206 650 166 612 C122 570 94 526 72 468" />
+                        <path class="flow flow-b1" style="stroke: url(#flowCyan);" d="M300 720 C246 690 206 650 166 612 C122 570 94 526 72 468" />
+                        <path class="branch2" d="M298 720 C318 664 346 618 388 580 C432 540 492 500 585 432" />
+                        <path class="flow flow-b2" style="stroke: url(#flowViolet);" d="M298 720 C318 664 346 618 388 580 C432 540 492 500 585 432" />
+                        <path class="branch3" d="M306 710 C318 648 314 594 300 540 C284 478 252 418 210 360" />
+                        <path class="flow flow-b3" style="stroke: url(#flowGold);" d="M28 710 C310 648 314 594 300 540 C284 478 252 418 210 360" />
+
+                        <!-- Upper branching (non-symmetric) -->
+                        <path class="branch1" d="M150 604 C134 560 128 520 132 484 C136 440 152 408 178 378" />
+                        <path class="flow flow-b1" style="stroke: url(#flowCyan);" d="M150 604 C134 560 128 520 132 484 C136 440 152 408 178 378" />
+                        <path class="branch3" d="M294 540 C268 492 246 456 220 420 C198 390 166 356 134 330" />
+                        <path class="flow flow-b3" style="stroke: url(#flowGold);" d="M294 540 C268 492 246 456 220 420 C198 390 166 356 134 330" />
+
+                        <!-- Extra canopy (more lush, asymmetric) -->
+                        <path class="twig" d="M430 344 C468 328 510 312 548 282" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M430 344 C468 328 510 312 548 282" />
+                        <path class="twig" d="M206 236 C176 206 150 170 138 132" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M206 236 C176 206 150 170 138 132" />
+                        <path class="twig" d="M468 398 C520 386 558 366 590 338" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M468 398 C520 386 558 366 590 338" />
+                        <path class="twig" d="M178 378 C148 352 122 318 104 274" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M178 378 C148 352 122 318 104 274" />
+                        <path class="twig" d="M220 420 C196 392 176 360 162 322" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M220 420 C196 392 176 360 162 322" />
+                        <path class="twig" d="M320 486 C332 452 346 422 368 396" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M320 486 C332 452 346 422 368 396" />
+                        <path class="twig" d="M368 396 C404 372 442 354 492 338" />
+                        <path class="flow flow-neutral" style="stroke: url(#flowNeutral);" d="M368 396 C404 372 442 354 492 338" />
+
+                        <!-- Buds (small luminous nodes) -->
+                        <circle class="bud" cx="72" cy="468" r="5" />
+                        <circle class="bud" cx="178" cy="378" r="4" />
+                        <circle class="bud" cx="585" cy="432" r="5" />
+                        <circle class="bud" cx="514" cy="468" r="4" />
+                        <circle class="bud" cx="134" cy="330" r="4" />
+                        <circle class="bud" cx="210" cy="360" r="4" />
+                        <circle class="bud" cx="548" cy="282" r="4" />
+                        <circle class="bud" cx="590" cy="338" r="4" />
+                        <circle class="bud" cx="138" cy="132" r="4" />
+                        <circle class="bud" cx="104" cy="274" r="4" />
+                        <circle class="bud" cx="492" cy="338" r="4" />
+                        <circle class="bud" cx="368" cy="396" r="3" />
+
+                        <!-- Hit paths (precise interaction along branches) -->
+                        <path class="tree-hit" data-pillar="p1" d="M300 720 C246 690 206 650 166 612 C122 570 94 526 72 468" />
+                        <path class="tree-hit" data-pillar="p1" d="M150 604 C134 560 128 520 132 484 C136 440 152 408 178 378" />
+                        <path class="tree-hit" data-pillar="p2" d="M298 720 C318 664 346 618 388 580 C432 540 492 500 585 432" />
+                        <path class="tree-hit" data-pillar="p3" d="M306 710 C318 648 314 594 300 540 C284 478 252 418 210 360" />
+                        <path class="tree-hit" data-pillar="p3" d="M294 540 C268 492 246 456 220 420 C198 390 166 356 134 330" />
+                        <path class="tree-hit tree-hit--neutral" data-pillar="t0" d="M305 860 C295 785 286 730 290 665 C294 604 312 548 320 486 C332 395 320 330 305 270" />
+                        <path class="tree-hit tree-hit--neutral" data-pillar="t0" d="M318 486 C360 450 405 420 468 398" />
+                        <path class="tree-hit tree-hit--neutral" data-pillar="t0" d="M305 350 C274 312 236 276 206 236" />
+                        <path class="tree-hit tree-hit--neutral" data-pillar="t0" d="M332 410 C358 386 392 360 430 344" />
+                        <path class="tree-hit tree-hit--neutral" data-pillar="t0" d="M430 344 C468 328 510 312 548 282" />
+                        <path class="tree-hit tree-hit--neutral" data-pillar="t0" d="M206 236 C176 206 150 170 138 132" />
+                        <path class="tree-hit tree-hit--neutral" data-pillar="t0" d="M468 398 C520 386 558 366 590 338" />
+                        <path class="tree-hit tree-hit--neutral" data-pillar="t0" d="M178 378 C148 352 122 318 104 274" />
+                    </svg>
+
+                    <!-- Ghost pillars (keep existing copy mapping by id) -->
+                    <div class="prism-pillar prism-pillar--ghost" id="p1"></div>
+                    <div class="prism-pillar prism-pillar--ghost" id="p2"></div>
+                    <div class="prism-pillar prism-pillar--ghost" id="p3"></div>
                 </div>
             </div>
         </div>
@@ -1426,36 +1662,45 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
                 }
             });
 
-            if (!state.isMobile && prismArea && prismPillars.length) {
+            if (!state.isMobile && prismArea) {
                 const torchX = state.pos.x;
                 const torchY = state.pos.y;
 
-                prismPillars.forEach((pillar) => {
-                    const rect = pillar.getBoundingClientRect();
-                    const cx = rect.left + rect.width / 2;
-                    const cy = rect.top + rect.height * 0.42;
-                    const d = Math.hypot(torchX - cx, torchY - cy);
-                    const near = Math.max(0, 1 - d / 260);
+                const hit = document.elementFromPoint(torchX, torchY);
+                const hitPillar = hit ? hit.closest('[data-pillar]') : null;
+                const activeId = hitPillar ? hitPillar.getAttribute('data-pillar') : null;
 
-                    const axisX = rect.left + rect.width * 0.52;
-                    const axisHit = Math.abs(torchX - axisX) < 22 && torchY > rect.top && torchY < rect.bottom;
+                const prev1 = parseFloat(getComputedStyle(prismArea).getPropertyValue('--g1')) || 0;
+                const prev2 = parseFloat(getComputedStyle(prismArea).getPropertyValue('--g2')) || 0;
+                const prev3 = parseFloat(getComputedStyle(prismArea).getPropertyValue('--g3')) || 0;
 
-                    pillar.style.setProperty('--glow', `${Math.min(1, near)}`);
-                    if (axisHit && near > 0.18) {
-                        pillar.classList.add('prism-active');
-                    } else {
-                        pillar.classList.remove('prism-active');
-                    }
-                });
+                const t1 = activeId === 'p1' ? 1 : 0;
+                const t2 = activeId === 'p2' ? 1 : 0;
+                const t3 = activeId === 'p3' ? 1 : 0;
+                const t0 = activeId === 't0' ? 1 : Math.max(t1, t2, t3) * 0.45;
+
+                const k = 0.14;
+                const g1 = prev1 + (t1 - prev1) * k;
+                const g2 = prev2 + (t2 - prev2) * k;
+                const g3 = prev3 + (t3 - prev3) * k;
+                const prev0 = parseFloat(getComputedStyle(prismArea).getPropertyValue('--g0')) || 0;
+                const g0 = prev0 + (t0 - prev0) * k;
+
+                prismArea.style.setProperty('--g0', `${g0}`);
+                prismArea.style.setProperty('--g1', `${g1}`);
+                prismArea.style.setProperty('--g2', `${g2}`);
+                prismArea.style.setProperty('--g3', `${g3}`);
+
+                const p1 = document.getElementById('p1');
+                const p2 = document.getElementById('p2');
+                const p3 = document.getElementById('p3');
+                if (p1) p1.classList.toggle('prism-active', activeId === 'p1');
+                if (p2) p2.classList.toggle('prism-active', activeId === 'p2');
+                if (p3) p3.classList.toggle('prism-active', activeId === 'p3');
 
                 prismCopies.forEach((copy) => {
                     const target = copy.getAttribute('data-pillar');
-                    const pillar = document.getElementById(target);
-                    if (pillar && pillar.classList.contains('prism-active')) {
-                        copy.classList.add('prism-active');
-                    } else {
-                        copy.classList.remove('prism-active');
-                    }
+                    copy.classList.toggle('prism-active', !!activeId && target === activeId);
                 });
             }
 
