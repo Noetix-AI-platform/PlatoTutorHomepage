@@ -594,32 +594,34 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
  }
  .agora-emblem-holder {
  position: absolute;
- bottom: 36px;
+ bottom: 38px;
  left: 50%;
  transform: translateX(-50%);
- width: 140px;
- height: 140px;
+ width: 120px;
+ height: 120px;
  pointer-events: none;
  display: flex;
  align-items: center;
  justify-content: center;
  z-index: 45;
+ perspective: 1100px;
  }
  .agora-emblem {
- width: 96px;
- height: 96px;
+ width: 76px;
+ height: 76px;
  border-radius: 9999px;
- border: 1px solid rgba(212, 175, 55, 0.35);
+ border: 1.5px solid rgba(212, 175, 55, 0.55);
  box-shadow:
- 0 0 40px rgba(212, 175, 55, 0.18),
- inset 0 0 24px rgba(212, 175, 55, 0.15);
- background: radial-gradient(circle at 32% 32%, rgba(255, 255, 255, 0.15), rgba(212, 175, 55, 0.08) 55%, rgba(0, 0, 0, 0.65));
+ 0 0 26px rgba(212, 175, 55, 0.26),
+ inset 0 0 18px rgba(212, 175, 55, 0.25);
+ background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.22), rgba(212, 175, 55, 0.08) 60%, rgba(5, 5, 5, 0.75));
  display: flex;
  align-items: center;
  justify-content: center;
  position: relative;
  mix-blend-mode: screen;
- animation: auric-spin 18s linear infinite;
+ transform-style: preserve-3d;
+ animation: auric-spin 14s linear infinite;
  }
  .agora-emblem::before,
  .agora-emblem::after {
@@ -629,26 +631,27 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
  pointer-events: none;
  }
  .agora-emblem::before {
- inset: 12px;
- border: 1px solid rgba(212, 175, 55, 0.4);
- box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+ inset: 8px;
+ border: 1px solid rgba(212, 175, 55, 0.55);
+ box-shadow: 0 0 12px rgba(212, 175, 55, 0.45);
  }
  .agora-emblem::after {
- inset: -6px;
- border: 1px solid rgba(212, 175, 55, 0.12);
- opacity: 0.45;
- filter: blur(0.2px);
+ inset: -4px;
+ border: 1px solid rgba(212, 175, 55, 0.16);
+ opacity: 0.55;
+ filter: blur(0.25px);
  }
  .agora-emblem__glyph {
  font-family: 'EB Garamond', serif;
- font-size: 26px;
- letter-spacing: 0.55em;
+ font-size: 23px;
+ letter-spacing: 0.15em;
  text-transform: uppercase;
- color: #F6E2A6;
+ color: #FCE8B4;
  }
  @keyframes auric-spin {
- from { transform: rotate(0deg); }
- to { transform: rotate(360deg); }
+ 0% { transform: rotateY(0deg); }
+ 50% { transform: rotateY(180deg); }
+ 100% { transform: rotateY(360deg); }
  }
 </style></head>
 <body>
@@ -752,7 +755,7 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
                         <span class="text-white/40 italic text-4xl">The Art of Midwifery</span>
                     </h2>
                     <p class="font-sans text-sm text-white/60 leading-loose max-w-md tracking-wide">
-                        Ideas are not taught; they are recalled. Like a sculpture trapped in marble, the truth already exists within your mind. We simply remove the excess stone.
+                        We reject the wall of text. Instead of generating endless lectures, we guide you to the answer through questions. Like a midwife delivering an idea, we help you birth the knowledge that is already within reach. 
                     </p>
                 </div>
                 
@@ -775,13 +778,12 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
                 <div class="text-left">
                     <span class="font-sans text-[10px] text-aureate tracking-widest uppercase mb-4 block">The Constellation of Logic</span>
-                    <h2 class="font-serif text-5xl md:text-6xl text-white tracking-tight leading-[0.95]">Elenchus</h2>
+                    <h2 class="font-serif text-5xl md:text-6xl text-white tracking-tight leading-[0.95]">Adaptive Flow</h2>
                     <p class="font-sans text-sm text-white/55 leading-loose max-w-xl mt-8 tracking-wide">
-                        Here, contradictions do not end a thought—
-                        they begin its structure.
+                        Wander, verify, and return. Our dialogue engine supports non-linear learning.
                     </p>
                     <p class="font-sans text-xs text-white/35 leading-loose max-w-xl mt-6 tracking-wider">
-                        (Reserved for future product messaging)
+                        Ask a side question, challenge a premise, or dive deep into a detail—the system tracks your intent and gently guides you back to the core path without losing context.
                     </p>
                 </div>
 
@@ -792,9 +794,7 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
                     </div>
                     <h3 class="font-serif text-2xl md:text-3xl text-white/90 tracking-tight">A map for reasoning.</h3>
                     <p class="font-sans text-sm text-white/55 leading-loose mt-5">
-                        Place future copy here: what the agent can decompose,
-                        how fragments connect, and why the model reveals structure.
-                    </p>
+                        Every query is mapped to your personal progress. We ensure you know exactly where you are, what you've conquered, and what remains to be explored. 
                     <div class="mt-8 h-px bg-white/10"></div>
                     <p class="font-sans text-xs text-white/35 leading-loose mt-6">
                         Hover near nodes to reveal connections.
@@ -813,33 +813,32 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
         <div class="prism-frame">
             <div class="prism-wrap">
                 <div class="prism-text">
-                    <span class="font-sans text-[10px] text-aureate tracking-widest uppercase mb-4 block">The Matrix of Clarity</span>
-                    <h2 class="font-serif text-5xl md:text-6xl text-white tracking-tight leading-[0.95]">The Prism</h2>
+                    <span class="font-sans text-[10px] text-aureate tracking-widest uppercase mb-4 block">Structure & Growth</span>
+                    <h2 class="font-serif text-5xl md:text-6xl text-white tracking-tight leading-[0.95]">Knowledge Tree</h2>
                     <p class="font-sans text-sm text-white/55 leading-loose max-w-xl mt-8 tracking-wide">
-                        When light passes through a tool, it becomes legible.
-                        Not louder—just clearer.
+                        Your curriculum is generated specifically for you. A living, breathing tree of modules and units that grows as you learn.
                     </p>
                     <div class="mt-10 space-y-6">
                         <div class="text-white/60 leading-loose font-sans text-sm">
                             <span class="text-white/40 uppercase tracking-[0.35em] text-[10px] block mb-2">Capability</span>
                             <div class="prism-copy" data-pillar="p1">
-                                <span class="font-serif italic text-white/80">Logical Verification</span>
+                                <span class="font-serif italic text-white/80">Dynamic Modules</span>
                                 <span class="text-white/40"> — </span>
-                                <span>turn <span class="kw kw-cyan">consistency</span> into something you can trust.</span>
+                                <span>tailored units that <span class="kw kw-cyan"> adapt</span> to your pace.</span>
                             </div>
                         </div>
                         <div class="text-white/60 leading-loose font-sans text-sm">
                             <div class="prism-copy" data-pillar="p2">
-                                <span class="font-serif italic text-white/80">Fallacy Detection</span>
+                                <span class="font-serif italic text-white/80">Active Inquiry</span>
                                 <span class="text-white/40"> — </span>
-                                <span>surface <span class="kw kw-violet">contradictions</span> before they become conclusions.</span>
+                                <span>encouraging <span class="kw kw-violet">questions </span> over passive reading.</span>
                             </div>
                         </div>
                         <div class="text-white/60 leading-loose font-sans text-sm">
                             <div class="prism-copy" data-pillar="p3">
-                                <span class="font-serif italic text-white/80">Socratic Prompting</span>
+                                <span class="font-serif italic text-white/80">Mastery Tracking</span>
                                 <span class="text-white/40"> — </span>
-                                <span>ask the <span class="kw kw-gold">right question</span> until the answer sharpens.</span>
+                                <span>conquer <span class="kw kw-gold">one concept</span> at a time.</span>
                             </div>
                         </div>
                         <p class="font-sans text-xs text-white/35 leading-loose mt-6 tracking-wider">
