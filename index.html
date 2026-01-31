@@ -592,11 +592,75 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
  transform: scaleX(1);
  opacity: 1;
  }
+ .agora-emblem-holder {
+ position: absolute;
+ bottom: 36px;
+ left: 50%;
+ transform: translateX(-50%);
+ width: 140px;
+ height: 140px;
+ pointer-events: none;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 45;
+ }
+ .agora-emblem {
+ width: 96px;
+ height: 96px;
+ border-radius: 9999px;
+ border: 1px solid rgba(212, 175, 55, 0.35);
+ box-shadow:
+ 0 0 40px rgba(212, 175, 55, 0.18),
+ inset 0 0 24px rgba(212, 175, 55, 0.15);
+ background: radial-gradient(circle at 32% 32%, rgba(255, 255, 255, 0.15), rgba(212, 175, 55, 0.08) 55%, rgba(0, 0, 0, 0.65));
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: relative;
+ mix-blend-mode: screen;
+ animation: auric-spin 18s linear infinite;
+ }
+ .agora-emblem::before,
+ .agora-emblem::after {
+ content: '';
+ position: absolute;
+ border-radius: inherit;
+ pointer-events: none;
+ }
+ .agora-emblem::before {
+ inset: 12px;
+ border: 1px solid rgba(212, 175, 55, 0.4);
+ box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+ }
+ .agora-emblem::after {
+ inset: -6px;
+ border: 1px solid rgba(212, 175, 55, 0.12);
+ opacity: 0.45;
+ filter: blur(0.2px);
+ }
+ .agora-emblem__glyph {
+ font-family: 'EB Garamond', serif;
+ font-size: 26px;
+ letter-spacing: 0.55em;
+ text-transform: uppercase;
+ color: #F6E2A6;
+ }
+ @keyframes auric-spin {
+ from { transform: rotate(0deg); }
+ to { transform: rotate(360deg); }
+ }
 </style></head>
 <body>
 
-    <!-- VISUAL ENGINE LAYERS -->
-    <div class="hero-grain"></div>
+ <!-- VISUAL ENGINE LAYERS -->
+ <div class="hero-grain"></div>
+ <div class="ambient-hint"></div>
+ <div id="cursor-ui"></div>
+ <div id="cursor-dot"></div>
+ <canvas id="brush-canvas"></canvas>
+ <div id="lumen-boost"></div>
+ <div id="the-veil"></div>
     <div class="ambient-hint"></div>
     <div id="cursor-ui"></div>
     <div id="cursor-dot"></div>
@@ -830,6 +894,11 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
                 <a href="#" class="hover:text-aureate transition-colors">Contact</a>
             </div>
         </footer>
+        <div class="agora-emblem-holder" aria-hidden="true">
+            <div class="agora-emblem">
+                <span class="agora-emblem__glyph">Φ</span>
+            </div>
+        </div>
     </section>
 
     <!-- PHYSICS ENGINE -->
