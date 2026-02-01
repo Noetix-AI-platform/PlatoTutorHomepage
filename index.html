@@ -821,6 +821,10 @@ transform-style: preserve-3d;
 will-change: transform;
 transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 isolation: isolate;
+--tilt-rx: 0deg;
+--tilt-ry: 0deg;
+--door-tx: 0px;
+--door-ty: 0px;
 --mx: 0;
 --my: 0;
 --glow-x: 50%;
@@ -867,6 +871,66 @@ opacity: 1;
 .maieutics-interactive.is-active::after,
 .maieutics-interactive:hover::after {
 opacity: 0.9;
+}
+
+#maieutics .reveal-image-container,
+#maieutics #maieutics-text {
+opacity: var(--door-o, 0);
+}
+
+#maieutics .reveal-image-container {
+transform: translate3d(var(--door-lx, -140px), var(--door-ly, 20px), 0) rotate(-0.35deg);
+will-change: transform, opacity;
+}
+
+#maieutics #maieutics-text {
+transform: translate3d(var(--door-rx, 140px), var(--door-ry, 20px), 0) rotate(0.35deg);
+will-change: transform, opacity;
+}
+
+.maieutics-interactive {
+transform: translate3d(var(--door-tx), var(--door-ty), 0) perspective(900px) rotateX(var(--tilt-rx)) rotateY(var(--tilt-ry));
+}
+
+@media (prefers-reduced-motion: reduce) {
+#maieutics .reveal-image-container,
+#maieutics #maieutics-text {
+opacity: 1;
+transform: none;
+}
+}
+
+@keyframes maieutics-sheen {
+0% { background-position: 0% 50%; }
+100% { background-position: 240% 50%; }
+}
+
+@media (hover: none) {
+.maieutics-interactive::after {
+animation: none;
+opacity: 0.25;
+}
+}
+.maieutics-interactive h2,
+.maieutics-interactive p {
+transition: text-shadow 140ms ease;
+text-shadow:
+calc(var(--mx) * 12px) calc(var(--my) * 12px) 26px rgba(212,175,55,0.20),
+0 0 18px rgba(255,255,255,0.06);
+}
+.maieutics-char {
+display: inline-block;
+position: relative;
+transition: transform 120ms ease, filter 120ms ease, text-shadow 120ms ease, color 120ms ease;
+}
+.maieutics-char.is-hot {
+transform: translateY(-0.5px) scale(1.02);
+color: rgba(255,255,255,0.98);
+text-shadow:
+0 0 10px rgba(255,255,255,0.16),
+0 0 24px rgba(212,175,55,0.30),
+0 0 42px rgba(212,175,55,0.20);
+filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
 }
 
 @keyframes maieutics-sheen {
@@ -1259,6 +1323,7 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
         const imageContainers = document.querySelectorAll('.reveal-image-container');
         const imageVeils = document.querySelectorAll('.image-veil');
         const body = document.body;
+        const maieuticsSection = document.getElementById('maieutics');
         const maieuticsText = document.getElementById('maieutics-text');
         const agoraSection = document.getElementById('agora');
         const lumenBoost = document.getElementById('lumen-boost');
@@ -1684,6 +1749,9 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
         window.addEventListener('resize', handleResize);
         handleResize();
 
+        const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let maieuticsDoorStaticApplied = false;
+
         initElenchusConstellation();
         resizeElenchusCanvas();
 
@@ -1693,50 +1761,30 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
         }
 
         window.addEventListener('mousemove', (e) => {
-            if (!state.isMobile) {
-                state.mouse.x = e.clientX;
-                state.mouse.y = e.clientY;
+            if (state.isMobile) return;
+            state.mouse.x = e.clientX;
+            state.mouse.y = e.clientY;
 
-                if (cursorDot) {
-                    cursorDot.style.transform = `translate3d(${(e.clientX - 4).toFixed(2)}px, ${(e.clientY - 4).toFixed(2)}px, 0)`;
-                }
-
-                if (ENABLE_BRUSH_TRAIL && brushReady && body.classList.contains('light-mode')) {
-                    const now = performance.now();
-                    if (brushLast.has) {
-                        const dt = now - brushLast.t;
-                        if (dt > 34) {
-                            addBrushSegment(brushLast.x, brushLast.y, e.clientX, e.clientY, now);
-                            brushLast.t = now;
-                            brushLast.x = e.clientX;
-                            brushLast.y = e.clientY;
-                        }
-                    } else {
-                        brushLast.has = true;
-                        brushLast.t = now;
-                        brushLast.x = e.clientX;
-                        brushLast.y = e.clientY;
-                    }
-                }
-
-                // Image Torch Logic
-                imageContainers.forEach((container, index) => {
-                    const rect = container.getBoundingClientRect();
-                    const veil = imageVeils[index];
-                    
-                    if (veil &&
-                        e.clientX >= rect.left - 100 && 
-                        e.clientX <= rect.right + 100 && 
-                        e.clientY >= rect.top - 100 && 
-                        e.clientY <= rect.bottom + 100
-                    ) {
-                        const localX = e.clientX - rect.left;
-                        const localY = e.clientY - rect.top;
-                        veil.style.setProperty('--local-x', `${localX}px`);
-                        veil.style.setProperty('--local-y', `${localY}px`);
-                    }
-                });
+            if (cursorDot) {
+                cursorDot.style.transform = `translate3d(${(e.clientX - 4).toFixed(2)}px, ${(e.clientY - 4).toFixed(2)}px, 0)`;
             }
+
+            imageContainers.forEach((container, index) => {
+                const rect = container.getBoundingClientRect();
+                const v = imageVeils[index];
+                if (!v) return;
+                if (
+                    e.clientX >= rect.left - 100 &&
+                    e.clientX <= rect.right + 100 &&
+                    e.clientY >= rect.top - 100 &&
+                    e.clientY <= rect.bottom + 100
+                ) {
+                    const localX = e.clientX - rect.left;
+                    const localY = e.clientY - rect.top;
+                    v.style.setProperty('--local-x', `${localX}px`);
+                    v.style.setProperty('--local-y', `${localY}px`);
+                }
+            });
         });
 
         if (maieuticsText) {
@@ -1779,7 +1827,8 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
                 maieuticsText.style.setProperty('--my', '0');
                 maieuticsText.style.setProperty('--glow-x', '50%');
                 maieuticsText.style.setProperty('--glow-y', '50%');
-                maieuticsText.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+                maieuticsText.style.setProperty('--tilt-rx', '0deg');
+                maieuticsText.style.setProperty('--tilt-ry', '0deg');
             };
 
             maieuticsText.addEventListener('mousemove', (e) => {
@@ -1798,7 +1847,8 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
 
                 const rx = (-ny * 10);
                 const ry = (nx * 12);
-                maieuticsText.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+                maieuticsText.style.setProperty('--tilt-rx', `${rx.toFixed(2)}deg`);
+                maieuticsText.style.setProperty('--tilt-ry', `${ry.toFixed(2)}deg`);
 
                 const r2 = MAIEUTICS_HIT_RADIUS * MAIEUTICS_HIT_RADIUS;
 
@@ -1866,6 +1916,37 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
             } else {
                 state.pos.x += (state.mouse.x - state.pos.x) * CONFIG.lerpFactor;
                 state.pos.y += (state.mouse.y - state.pos.y) * CONFIG.lerpFactor;
+            }
+
+            if (maieuticsSection) {
+                if (state.isMobile || prefersReducedMotion) {
+                    if (!maieuticsDoorStaticApplied) {
+                        maieuticsSection.style.setProperty('--door-o', '1');
+                        maieuticsSection.style.setProperty('--door-lx', '0px');
+                        maieuticsSection.style.setProperty('--door-rx', '0px');
+                        maieuticsSection.style.setProperty('--door-ly', '0px');
+                        maieuticsSection.style.setProperty('--door-ry', '0px');
+                        maieuticsDoorStaticApplied = true;
+                    }
+                } else {
+                    const rect = maieuticsSection.getBoundingClientRect();
+                    const vh = window.innerHeight;
+                    const start = vh * 0.94;
+                    const end = vh * 0.12;
+                    const raw = (start - rect.top) / Math.max(1, (start - end));
+                    const p = Math.max(0, Math.min(1, raw));
+                    const e = easeInOutCubic(p);
+
+                    const x = (1 - e) * 140;
+                    const arc = Math.sin(e * Math.PI) * -14;
+                    const y = (1 - e) * 20 + arc;
+
+                    maieuticsSection.style.setProperty('--door-o', `${e.toFixed(4)}`);
+                    maieuticsSection.style.setProperty('--door-lx', `${(-x).toFixed(2)}px`);
+                    maieuticsSection.style.setProperty('--door-rx', `${(x).toFixed(2)}px`);
+                    maieuticsSection.style.setProperty('--door-ly', `${(y).toFixed(2)}px`);
+                    maieuticsSection.style.setProperty('--door-ry', `${(y).toFixed(2)}px`);
+                }
             }
 
             r.style.setProperty('--cx', `${state.pos.x}px`);
