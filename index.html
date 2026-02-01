@@ -66,19 +66,19 @@ mask-image: radial-gradient(
 circle var(--torch-radius) at var(--cx) var(--cy),
 transparent 0px,
 transparent 100px, /* Smaller clear core */
-rgba(0,0,0,0.1) 200px,
-rgba(0,0,0,0.4) 350px,
-rgba(0,0,0,0.9) 550px,
-black 800px /* Very long falloff */
+rgba(0,0,0,0.1) 260px,
+rgba(0,0,0,0.4) 420px,
+rgba(0,0,0,0.9) 720px,
+black 980px /* Very long falloff */
 );
 -webkit-mask-image: radial-gradient(
 circle var(--torch-radius) at var(--cx) var(--cy),
 transparent 0px,
 transparent 100px,
-rgba(0,0,0,0.1) 200px,
-rgba(0,0,0,0.4) 350px,
-rgba(0,0,0,0.9) 550px,
-black 800px
+rgba(0,0,0,0.1) 260px,
+rgba(0,0,0,0.4) 420px,
+rgba(0,0,0,0.9) 720px,
+black 980px
 );
 backdrop-filter: blur(var(--blur-strength));
 -webkit-backdrop-filter: blur(var(--blur-strength));
@@ -574,12 +574,12 @@ z-index: 10;
 transition: opacity 0.5s ease;
 pointer-events: none;
 mask-image: radial-gradient(
-circle 250px at var(--local-x, 50%) var(--local-y, 50%),
+circle 620px at var(--local-x, 50%) var(--local-y, 50%),
 transparent 0%,
 black 60%
 );
 -webkit-mask-image: radial-gradient(
-circle 250px at var(--local-x, 50%) var(--local-y, 50%),
+circle 620px at var(--local-x, 50%) var(--local-y, 50%),
 transparent 0%,
 black 60%
 );
@@ -1038,7 +1038,7 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
                         <path class="branch2" d="M298 720 C318 664 346 618 388 580 C432 540 492 500 585 432" />
                         <path class="flow flow-b2" style="stroke: url(#flowViolet);" d="M298 720 C318 664 346 618 388 580 C432 540 492 500 585 432" />
                         <path class="branch3" d="M306 710 C318 648 314 594 300 540 C284 478 252 418 210 360" />
-                        <path class="flow flow-b3" style="stroke: url(#flowGold);" d="M28 710 C310 648 314 594 300 540 C284 478 252 418 210 360" />
+                        <path class="flow flow-b3" style="stroke: url(#flowGold);" d="M306 710 C318 648 314 594 300 540 C284 478 252 418 210 360" />
 
                         <!-- Upper branching (non-symmetric) -->
                         <path class="branch1" d="M150 604 C134 560 128 520 132 484 C136 440 152 408 178 378" />
