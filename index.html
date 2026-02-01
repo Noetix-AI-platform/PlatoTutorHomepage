@@ -830,6 +830,9 @@ isolation: isolate;
 --glow-x: 50%;
 --glow-y: 50%;
 }
+.maieutics-interactive.is-settling {
+transition-duration: 680ms;
+}
 .maieutics-interactive::before {
 content: '';
 position: absolute;
@@ -884,12 +887,14 @@ will-change: transform, opacity;
 }
 
 #maieutics #maieutics-text {
-transform: translate3d(var(--door-rx, 140px), var(--door-ry, 20px), 0) rotate(0.35deg);
+transform:
+translate3d(var(--door-rx, 140px), var(--door-ry, 20px), 0)
+translate3d(calc(var(--mx) * 10px), calc(var(--my) * 8px), 0)
+perspective(900px)
+rotateX(var(--tilt-rx))
+rotateY(var(--tilt-ry))
+rotate(0.35deg);
 will-change: transform, opacity;
-}
-
-.maieutics-interactive {
-transform: translate3d(var(--door-tx), var(--door-ty), 0) perspective(900px) rotateX(var(--tilt-rx)) rotateY(var(--tilt-ry));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1790,6 +1795,10 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
         if (maieuticsText) {
             let hotChars = new Set();
 
+            let maieuticsSettleTimer = 0;
+            let maieuticsUnsettleTimer = 0;
+
+
             const wrapMaieuticsChars = (root) => {
                 const targets = root.querySelectorAll('h2, p');
                 targets.forEach((el) => {
@@ -1831,8 +1840,44 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
                 maieuticsText.style.setProperty('--tilt-ry', '0deg');
             };
 
+            const cancelMaieuticsSettle = () => {
+                if (maieuticsSettleTimer) window.clearTimeout(maieuticsSettleTimer);
+                if (maieuticsUnsettleTimer) window.clearTimeout(maieuticsUnsettleTimer);
+                maieuticsSettleTimer = 0;
+                maieuticsUnsettleTimer = 0;
+                maieuticsText.classList.remove('is-settling');
+            };
+
+            const settleMaieuticsToRest = () => {
+                cancelMaieuticsSettle();
+
+                maieuticsText.classList.remove('is-active');
+                hotChars.forEach((ch) => ch.classList.remove('is-hot'));
+                hotChars = new Set();
+
+                maieuticsSettleTimer = window.setTimeout(() => {
+                    maieuticsText.classList.add('is-settling');
+                    requestAnimationFrame(() => {
+                        maieuticsText.style.setProperty('--mx', '0');
+                        maieuticsText.style.setProperty('--my', '0');
+                        maieuticsText.style.setProperty('--glow-x', '50%');
+                        maieuticsText.style.setProperty('--glow-y', '50%');
+                        maieuticsText.style.setProperty('--tilt-rx', '0deg');
+                        maieuticsText.style.setProperty('--tilt-ry', '0deg');
+                    });
+
+                    maieuticsUnsettleTimer = window.setTimeout(() => {
+                        maieuticsText.classList.remove('is-settling');
+                        maieuticsUnsettleTimer = 0;
+                    }, 760);
+
+                    maieuticsSettleTimer = 0;
+                }, 120);
+            };
+
             maieuticsText.addEventListener('mousemove', (e) => {
                 if (state.isMobile) return;
+                cancelMaieuticsSettle();
                 const rect = maieuticsText.getBoundingClientRect();
                 const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
                 const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
@@ -1905,7 +1950,7 @@ filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
                 hotChars = nextHot;
             });
 
-            maieuticsText.addEventListener('mouseleave', resetMaieuticsFx);
+            maieuticsText.addEventListener('mouseleave', settleMaieuticsToRest);
             resetMaieuticsFx();
         }
 
