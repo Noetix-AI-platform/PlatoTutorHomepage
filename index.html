@@ -815,6 +815,51 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
  50% { transform: rotateY(180deg); }
  100% { transform: rotateY(360deg); }
  }
+.maieutics-interactive {
+position: relative;
+transform-style: preserve-3d;
+will-change: transform;
+transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+--mx: 0;
+--my: 0;
+--glow-x: 50%;
+--glow-y: 50%;
+}
+.maieutics-interactive::before {
+content: '';
+position: absolute;
+inset: -24px;
+pointer-events: none;
+border-radius: 18px;
+opacity: 0;
+transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1);
+background: radial-gradient(circle 260px at var(--glow-x) var(--glow-y), rgba(212,175,55,0.16) 0%, rgba(212,175,55,0.06) 32%, rgba(0,0,0,0) 70%);
+filter: blur(0.2px);
+}
+.maieutics-interactive.is-active::before {
+opacity: 1;
+}
+.maieutics-interactive h2,
+.maieutics-interactive p {
+transition: text-shadow 140ms ease;
+text-shadow:
+calc(var(--mx) * 12px) calc(var(--my) * 12px) 26px rgba(212,175,55,0.20),
+0 0 18px rgba(255,255,255,0.06);
+}
+.maieutics-char {
+display: inline-block;
+position: relative;
+transition: transform 120ms ease, filter 120ms ease, text-shadow 120ms ease, color 120ms ease;
+}
+.maieutics-char.is-hot {
+transform: translateY(-0.5px) scale(1.02);
+color: rgba(255,255,255,0.98);
+text-shadow:
+0 0 10px rgba(255,255,255,0.16),
+0 0 24px rgba(212,175,55,0.30),
+0 0 42px rgba(212,175,55,0.20);
+filter: drop-shadow(0 0 12px rgba(212,175,55,0.18));
+}
 </style></head>
 <body>
 
@@ -910,7 +955,7 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
                 <div class="absolute inset-0 border border-white/5 pointer-events-none"></div>
             </div>
 
-            <div class="order-1 lg:order-2 space-y-12 relative z-20">
+            <div class="order-1 lg:order-2 space-y-12 relative z-20 maieutics-interactive" id="maieutics-text">
                 <div class="border-l border-white/10 pl-8">
                     <h2 class="font-serif text-5xl md:text-6xl text-white leading-none tracking-tight mb-6">
                         Maieutics <br>
@@ -1179,6 +1224,7 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
         const imageContainers = document.querySelectorAll('.reveal-image-container');
         const imageVeils = document.querySelectorAll('.image-veil');
         const body = document.body;
+        const maieuticsText = document.getElementById('maieutics-text');
         const agoraSection = document.getElementById('agora');
         const lumenBoost = document.getElementById('lumen-boost');
         const elenchusSection = document.getElementById('elenchus');
@@ -1400,8 +1446,8 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
             ctx.fill();
 
             const halo = ctx.createRadialGradient(0, 0, bhR * 0.35, 0, 0, bhR * 1.25);
-            halo.addColorStop(0, 'rgba(212,175,55,0)');
-            halo.addColorStop(0.5, 'rgba(212,175,55,0.04)');
+            halo.addColorStop(0, 'rgba(212, 175, 55, 0)');
+            halo.addColorStop(0.5, 'rgba(212, 175, 55, 0.04)');
             halo.addColorStop(1, 'rgba(0,0,0,0)');
             ctx.globalCompositeOperation = 'screen';
             ctx.fillStyle = halo;
@@ -1657,6 +1703,126 @@ text-shadow: 0 0 18px rgba(212, 175, 55, 0.08);
                 });
             }
         });
+
+        if (maieuticsText) {
+            let hotChars = new Set();
+
+            const wrapMaieuticsChars = (root) => {
+                const targets = root.querySelectorAll('h2, p');
+                targets.forEach((el) => {
+                    const nodes = Array.from(el.childNodes);
+                    nodes.forEach((node) => {
+                        if (node.nodeType !== Node.TEXT_NODE) return;
+                        const text = node.nodeValue || '';
+                        if (!text) return;
+
+                        const frag = document.createDocumentFragment();
+                        for (const ch of text) {
+                            if (ch === ' ') {
+                                frag.appendChild(document.createTextNode(' '));
+                                continue;
+                            }
+                            const span = document.createElement('span');
+                            span.className = 'maieutics-char';
+                            span.textContent = ch;
+                            frag.appendChild(span);
+                        }
+                        node.replaceWith(frag);
+                    });
+                });
+            };
+
+            wrapMaieuticsChars(maieuticsText);
+            const maieuticsChars = Array.from(maieuticsText.querySelectorAll('.maieutics-char'));
+            const MAIEUTICS_HIT_RADIUS = 50;
+            const MAIEUTICS_LINE_BAND = 14;
+            const resetMaieuticsFx = () => {
+                maieuticsText.classList.remove('is-active');
+                hotChars.forEach((ch) => ch.classList.remove('is-hot'));
+                hotChars = new Set();
+                maieuticsText.style.setProperty('--mx', '0');
+                maieuticsText.style.setProperty('--my', '0');
+                maieuticsText.style.setProperty('--glow-x', '50%');
+                maieuticsText.style.setProperty('--glow-y', '50%');
+                maieuticsText.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+            };
+
+            maieuticsText.addEventListener('mousemove', (e) => {
+                if (state.isMobile) return;
+                const rect = maieuticsText.getBoundingClientRect();
+                const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+                const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
+                const nx = (x / rect.width) - 0.5;
+                const ny = (y / rect.height) - 0.5;
+
+                maieuticsText.classList.add('is-active');
+                maieuticsText.style.setProperty('--mx', `${nx.toFixed(4)}`);
+                maieuticsText.style.setProperty('--my', `${ny.toFixed(4)}`);
+                maieuticsText.style.setProperty('--glow-x', `${x.toFixed(1)}px`);
+                maieuticsText.style.setProperty('--glow-y', `${y.toFixed(1)}px`);
+
+                const rx = (-ny * 10);
+                const ry = (nx * 12);
+                maieuticsText.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+
+                const r2 = MAIEUTICS_HIT_RADIUS * MAIEUTICS_HIT_RADIUS;
+
+                const hit = document.elementFromPoint(e.clientX, e.clientY);
+                let anchor = hit ? hit.closest('.maieutics-char') : null;
+
+                if (!anchor && maieuticsChars.length) {
+                    let best = null;
+                    let bestD2 = r2 + 1;
+                    for (const ch of maieuticsChars) {
+                        const b = ch.getBoundingClientRect();
+                        const cx = b.left + b.width / 2;
+                        const cy = b.top + b.height / 2;
+                        const dx = e.clientX - cx;
+                        const dy = e.clientY - cy;
+                        const d2 = dx * dx + dy * dy;
+                        if (d2 < bestD2) {
+                            bestD2 = d2;
+                            best = ch;
+                        }
+                    }
+                    anchor = bestD2 <= r2 ? best : null;
+                }
+
+                if (!anchor) {
+                    if (hotChars.size) {
+                        hotChars.forEach((ch) => ch.classList.remove('is-hot'));
+                        hotChars = new Set();
+                    }
+                    return;
+                }
+
+                const ab = anchor.getBoundingClientRect();
+                const lineY = ab.top + ab.height / 2;
+                const nextHot = new Set();
+
+                for (const ch of maieuticsChars) {
+                    const b = ch.getBoundingClientRect();
+                    const cx = b.left + b.width / 2;
+                    const cy = b.top + b.height / 2;
+                    if (Math.abs(cy - lineY) > MAIEUTICS_LINE_BAND) continue;
+                    const dx = e.clientX - cx;
+                    const dy = e.clientY - cy;
+                    const d2 = dx * dx + dy * dy;
+                    if (d2 <= r2) nextHot.add(ch);
+                }
+
+                hotChars.forEach((ch) => {
+                    if (!nextHot.has(ch)) ch.classList.remove('is-hot');
+                });
+                nextHot.forEach((ch) => {
+                    if (!hotChars.has(ch)) ch.classList.add('is-hot');
+                });
+                hotChars = nextHot;
+            });
+
+            maieuticsText.addEventListener('mouseleave', resetMaieuticsFx);
+            resetMaieuticsFx();
+        }
 
         const loop = () => {
             if (state.isMobile) {
