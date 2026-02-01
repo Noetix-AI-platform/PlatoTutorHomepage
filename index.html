@@ -16,6 +16,9 @@
 --cy: 50vh;
 --torch-radius: 450px;
 --blur-strength: 60px;
+--david-torch-x: 78vw;
+--david-torch-y: 46vh;
+--david-torch-radius: 260px;
 }
 body {
 background-color: #050505;
@@ -70,6 +73,14 @@ rgba(0,0,0,0.1) 260px,
 rgba(0,0,0,0.4) 420px,
 rgba(0,0,0,0.9) 720px,
 black 980px /* Very long falloff */
+),
+radial-gradient(
+circle var(--david-torch-radius) at var(--david-torch-x) var(--david-torch-y),
+transparent 0px,
+transparent 85px,
+rgba(0,0,0,0.12) 160px,
+rgba(0,0,0,0.55) 250px,
+black 360px
 );
 -webkit-mask-image: radial-gradient(
 circle var(--torch-radius) at var(--cx) var(--cy),
@@ -79,7 +90,17 @@ rgba(0,0,0,0.1) 260px,
 rgba(0,0,0,0.4) 420px,
 rgba(0,0,0,0.9) 720px,
 black 980px
+),
+radial-gradient(
+circle var(--david-torch-radius) at var(--david-torch-x) var(--david-torch-y),
+transparent 0px,
+transparent 85px,
+rgba(0,0,0,0.12) 160px,
+rgba(0,0,0,0.55) 250px,
+black 360px
 );
+mask-composite: intersect;
+-webkit-mask-composite: source-in;
 backdrop-filter: blur(var(--blur-strength));
 -webkit-backdrop-filter: blur(var(--blur-strength));
 }
